@@ -1,18 +1,20 @@
 package se.nishiyamastudios.pia11jan23
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class ContactsFragment : Fragment() {
 
-    var contactsadapter = ContactsAdapter()
+    lateinit var contactsadapter : ContactsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,6 +26,22 @@ class ContactsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Denna kod skickas in i adaptern, det blir vad som händer när man klickar på en rad.
+        //clickedcontact -> är en omdöpning av generiska it, man kan sätta vilket namn man vill
+        contactsadapter = ContactsAdapter { clickedcontact ->
+            Log.i("pia11debug", "KlICK PÅ RAD")
+
+            //requireActivity().supportFragmentManager.beginTransaction().add(R.id.fragmentContainerView, ContactDetailFragment()).addToBackStack(null).commit()
+
+            var godetail = ContactDetailFragment()
+            godetail.currentcontact = clickedcontact
+
+            requireActivity().supportFragmentManager.commit {
+                add(R.id.fragmentContainerView, godetail)
+                addToBackStack(null)
+            }
+        }
 
         //Här är Viewn färdigskapad
 

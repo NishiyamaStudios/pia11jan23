@@ -8,14 +8,15 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import org.w3c.dom.Text
 
-class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
+//Skicka med lite saker i adaptern : () -> Unit = En bit kod skickas med
+class ContactsAdapter(val onItemClicked : (Contactperson) -> Unit) : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
 
     var contacts = mutableListOf<Contactperson>()
 
     class ViewHolder(view : View) : RecyclerView.ViewHolder(view) {
 
         //När man skapar en ritning för rader så förbereder vi för våra fält och initierar dem
-        //Detta är ritningen för en rad
+        //Detta är ritningen för en rad, vad är raden
 
         val contactName : TextView
         val contactPhone : TextView
@@ -44,10 +45,11 @@ class ContactsAdapter : RecyclerView.Adapter<ContactsAdapter.ViewHolder>() {
         holder.contactName.text = contacts[position].contactname
         holder.contactPhone.text = contacts[position].contactphone
 
-        //Klick på hela raden
+        //Vad som händer när vi klickar på en rad (bit kod Unit som vi skickade med)
         holder.itemView.setOnClickListener {
-            
+            onItemClicked(contacts[position])
         }
+
     }
 
     override fun getItemCount(): Int {
