@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,16 +53,27 @@ class ContactsFragment : Fragment() {
 
         view.findViewById<Button>(R.id.addContactButton).setOnClickListener {
 
-            val contactName = view.findViewById<EditText>(R.id.addNameET).text.toString()
-            val contactPhone = view.findViewById<EditText>(R.id.addPhoneET).text.toString()
+            val contactName = view.findViewById<EditText>(R.id.addNameET)
+            val contactPhone = view.findViewById<EditText>(R.id.addPhoneET)
 
-            val tempContact = Contactperson()
-            tempContact.contactname = contactName
-            tempContact.contactphone = contactPhone
+            if(contactName.text.toString() == "" || contactPhone.text.toString() == "") {
+                //FEL, tomt värde
+                Toast.makeText(requireContext(), "Fyll i allt!", Toast.LENGTH_LONG).show()
+            } else {
 
-            contactsadapter.contacts.add(tempContact)
+                val tempContact = Contactperson()
+                tempContact.contactname = contactName.text.toString()
+                tempContact.contactphone = contactPhone.text.toString()
 
-            contactsadapter.notifyDataSetChanged()
+                contactsadapter.contacts.add(tempContact)
+
+                //Måste använda setText här istället för = "", p.g.a den nu är en editable.
+                contactName.setText("")
+                contactPhone.setText("")
+
+                contactsadapter.notifyDataSetChanged()
+
+            }
 
         }
 
